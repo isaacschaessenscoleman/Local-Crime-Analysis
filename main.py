@@ -52,9 +52,9 @@ def get_relevant_street_crimes_data(coords: tuple[float, float], year: int, mont
     return relevant_data
 
 
-def crime_data_to_csv(data: list[dict], file_path: str):
-    """Given a list of dictionaries with crime data, each dictionary
-    representing a crime, this function outputs the data into a csv
+def dict_to_csv(data: list[dict], file_path: str) -> None:
+    """Given a list of dictionaries with identical keys, representing an
+    instance of something, this function outputs the data into a csv
     file."""
 
     with open(file_path, 'w') as f:
@@ -73,10 +73,29 @@ def get_stop_and_search_data(coords: tuple[float, float], year: int, month: int)
 
     longitude, latitude = coords[0], coords[1]
 
-    crime_data = requests.get(
+    ss_data = requests.get(
         POLICE_BASE_URL+f"/stops-street?lat={latitude}&lng={longitude}&date={year}-{month}").json()
 
-    return crime_data
+    return ss_data
+
+
+def get_relevant_stop_and_search_data(coords: tuple[float, float], year: int, month: int) -> list[dict]:
+    """Given a location - (longitude, latitude) - this function returns
+    RELEVANT data for stop and search instances within a 1 mile radius, for a specific
+    year-month."""
+
+    ss_data = get_stop_and_search_data(coords, year, month)
+
+    relevant_data = []
+    for event in ss_data:
+
+        relevant_data.append({'age range': event['age_range'], 'outcome': event['outcome'],
+                              'involved person': event['involved_person'], 'gender': event['gender'],
+                              'legislation': event['legislation'], 'time': event['datetime'],
+                              'street': event['location']['street']['name'], 'type': event['type'],
+                              'object of search': event['object_of_search']})
+
+    return relevant_data
 
 
 if __name__ == "__main__":
@@ -87,8 +106,10 @@ if __name__ == "__main__":
 
     jan_crime_data = get_relevant_street_crimes_data(coords, 2024, 1)
 
-    crime_data_to_csv(jan_crime_data, 'Jan 2024')
+    dict_to_csv(jan_crime_data, 'Jan 2024')
 
-    ss_data = get_stop_and_search_data(coords, 2024, 1)
+    jan_ss_data = get_relevant_stop_and_search_data(coords, 2023, 4)
 
-    print(ss_data[0])
+    print(len(jan_ss_data))
+
+    dict_to_csv(jan_ss_data, 'jan_ss_data')
