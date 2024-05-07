@@ -57,13 +57,26 @@ def crime_data_to_csv(data: list[dict], file_path: str):
     representing a crime, this function outputs the data into a csv
     file."""
 
-    with open('Jan 2024', 'w') as f:
+    with open(file_path, 'w') as f:
         field_names = data[0].keys()
         writer = DictWriter(f, fieldnames=field_names)
         writer.writeheader()
 
         for crime in data:
             writer.writerow(crime)
+
+
+def get_stop_and_search_data(coords: tuple[float, float], year: int, month: int) -> list[dict]:
+    """Given a location - (longitude, latitude) - this function returns
+    data for stop and search instances within a 1 mile radius, for a specific
+    year-month."""
+
+    longitude, latitude = coords[0], coords[1]
+
+    crime_data = requests.get(
+        POLICE_BASE_URL+f"/stops-street?lat={latitude}&lng={longitude}&date={year}-{month}").json()
+
+    return crime_data
 
 
 if __name__ == "__main__":
@@ -75,3 +88,7 @@ if __name__ == "__main__":
     jan_crime_data = get_relevant_street_crimes_data(coords, 2024, 1)
 
     crime_data_to_csv(jan_crime_data, 'Jan 2024')
+
+    ss_data = get_stop_and_search_data(coords, 2024, 1)
+
+    print(ss_data[0])
