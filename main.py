@@ -1,4 +1,5 @@
 from os import environ as ENV
+from csv import DictWriter
 
 import requests
 from dotenv import load_dotenv
@@ -21,7 +22,7 @@ def postcode_to_coords(postcode: str) -> tuple[float]:
     return (location_data['result']['longitude'], location_data['result']['latitude'])
 
 
-def get_street_crimes_data(coords: tuple[float, float], year: int, month: int):
+def get_street_crimes_data(coords: tuple[float, float], year: int, month: int) -> list[dict]:
     """Given a location - (longitude, latitude) - this function returns
     data of street-level crimes within a 1 mile radius, for a specific
     year-month."""
@@ -34,10 +35,43 @@ def get_street_crimes_data(coords: tuple[float, float], year: int, month: int):
     return crime_data
 
 
+def get_relevant_street_crimes_data(coords: tuple[float, float], year: int, month: int) -> list[dict]:
+    """Given a location - (longitude, latitude) - this function returns
+    RELEVANT data of street-level crimes within a 1 mile radius, for a specific
+    year-month."""
+
+    crime_data = get_street_crimes_data(coords, year, month)
+
+    relevant_data = []
+    for crime in crime_data:
+
+        outcome_status = crime['outcome_status']['category'] if crime['outcome_status'] is not None else 'Unknown'
+        relevant_data.append({'category': crime['category'], 'street name': crime['location']
+                              ['street']['name'], 'outcome': outcome_status, 'date': crime['month']})
+
+    return relevant_data
+
+
+def crime_data_to_csv(data: list[dict], file_path: str):
+    """Given a list of dictionaries with crime data, each dictionary
+    representing a crime, this function outputs the data into a csv
+    file."""
+
+    with open('Jan 2024', 'w') as f:
+        field_names = data[0].keys()
+        writer = DictWriter(f, fieldnames=field_names)
+        writer.writeheader()
+
+        for crime in data:
+            writer.writerow(crime)
+
+
 if __name__ == "__main__":
 
     load_dotenv()
 
     coords = postcode_to_coords(ENV["MY_POSTCODE"])
 
-    crime_data = get_street_crimes_data(coords, 2024, 2)
+    jan_crime_data = get_relevant_street_crimes_data(coords, 2024, 1)
+
+    crime_data_to_csv(jan_crime_data, 'Jan 2024')
