@@ -1,3 +1,6 @@
+'''This file contains all of the functions related to extracting data from the Police and Postcode
+APIs.'''
+
 from os import environ as ENV
 from csv import DictWriter
 
