@@ -1,0 +1,18 @@
+body {
+  background-color: gray;
+}
+
+h1 {
+  color:blue;
+  text-align: left;
+  font-family: Helvetica;
+}
+
+p {
+  font-family: verdana;
+  font-size: 20px;
+}
+
+td {
+    text-align: center;
+}

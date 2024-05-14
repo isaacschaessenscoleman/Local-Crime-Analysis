@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="{% static 'css/postcode_page.css' %}">
+<body>
+    <h1>{{postcode}}</h1>
+    <p>This page shows data of crimes within a 1 mile radius of {{postcode}}.</p>
+
+<h1>My First Heading</h1>
+<img src="{% static 'png/bar_chart.png' %}" alt="alternatetext">
+<p>My first paragraph.</p>
+
+<h1>Streets with the most crimes</h1>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Number of Crimes</th>
+        <th>Most Common Category</th>
+    </tr>
+    {% for index, row in crime_street_df %}
+    <tr>
+        <td>{{ row.street }}</td>
+        <td>{{ row.total_crimes }}</td>
+        <td>{{ row.category }}</td>
+
+    </tr>
+    {% endfor %}
+</table>
+
+
+</body>
+</html>
+
