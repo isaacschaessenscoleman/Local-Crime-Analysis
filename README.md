@@ -17,7 +17,7 @@
    ```
    python3 manage.py runserver
    ```
-  After running this command, there will be a url in the terminal where you can access the locally-hosted website.
+  After running this command, there will be a url in the terminal where you can access the locally-hosted website (http://127.0.0.1:8000/).
 
 
 ## Endpoints
