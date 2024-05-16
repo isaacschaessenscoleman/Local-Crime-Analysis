@@ -14,19 +14,28 @@ def plot_bar(df: pd.core.frame.DataFrame, file_path: str) -> None:
 
     font_dict = {'weight': 'bold', 'size': 14}
 
-    print('4')
     use('agg')
     sns.set_theme(style='darkgrid', palette='deep', font='monospace')
-    print('5')
     plt.figure(facecolor='lightgray')
-    print('6')
-    bar_plot = sns.barplot(y=df.index, x=df[df.columns[0]], orient='h')
-    print('7')
+    sns.barplot(y=df.index, x=df[df.columns[0]], orient='h')
     plt.xlabel('Number of Crimes', fontdict=font_dict)
-    plt.ylabel('Category', fontdict=font_dict)
-    plt.title('Number of Crimes by Category', fontdict=font_dict)
-
+    plt.ylabel(df.columns[0].title(), fontdict=font_dict)
+    plt.title(
+        f'Number of Crimes by {df.columns[0].title()}', fontdict=font_dict)
     plt.savefig(file_path, bbox_inches='tight')
+
+
+def plot_line(df: pd.core.frame.DataFrame, file_path: str) -> None:
+    """This function produces a bar chart based on the inputted dataframe and category for
+    the bars. The function saves the image to the inputted filepath."""
+
+    font_dict = {'weight': 'bold', 'size': 14}
+
+    use('agg')
+    sns.set_theme(style='darkgrid', palette='deep', font='monospace')
+    plt.figure(facecolor='lightgray')
+
+    pass
 
 
 '''
