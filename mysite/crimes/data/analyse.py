@@ -1,6 +1,7 @@
 '''This file contains all of the functions related to the analysis of the the extracted data
 (crime and stop & search (ss) instances).'''
 
+from datetime import datetime, timedelta
 from os import environ as ENV
 
 from dotenv import load_dotenv
@@ -13,22 +14,53 @@ ss_categories = ['age range', 'gender', 'legislation',
                  'object of search', 'street', 'type', 'time', 'hour']
 
 
-def get_crime_data_df(post_code: str, year: int, month: int) -> pd.core.frame.DataFrame:
+def get_crime_data_df(post_code: str) -> pd.core.frame.DataFrame:
     """Given a postcode, year and month, this function returns a pandas
     dataframe with data on instances of crimes."""
 
     coords = postcode_to_coords(post_code)
-    crime_data = get_relevant_street_crimes_data(coords, year, month)
+
+    current_date = datetime.now()
+    current_year = current_date.year
+    current_month = current_date.month
+
+    dates = []
+    for year in range(2022, current_year+1):
+        if year == current_year:
+            dates += [(i, year) for i in range(1, current_month-1)]
+        else:
+            dates += [(i, year) for i in range(1, 13)]
+
+    crime_data = []
+    for date in dates:
+        crime_data += get_relevant_street_crimes_data(
+            coords, date[1], date[0])
 
     return pd.DataFrame(crime_data)
 
 
-def get_ss_data_df(post_code: str, year: int, month: int) -> pd.core.frame.DataFrame:
+def get_ss_data_df(post_code: str) -> pd.core.frame.DataFrame:
     """Given a postcode, year and month, this function returns a pandas
     dataframe with data on instances of stop and searches (ss)."""
 
     coords = postcode_to_coords(post_code)
-    ss_data = get_relevant_stop_and_search_data(coords, year, month)
+
+    current_date = datetime.now()
+    current_year = current_date.year
+    current_month = current_date.month
+
+    dates = []
+    for year in range(2022, current_year+1):
+        if year == current_year:
+            dates += [(i, year) for i in range(1, current_month-1)]
+        else:
+            dates += [(i, year) for i in range(1, 13)]
+
+    ss_data = []
+    for date in dates:
+        ss_data += get_relevant_stop_and_search_data(
+            coords, date[1], date[0])
+
     ss_df = pd.DataFrame(ss_data)
     ss_df['time'] = ss_df['time'].apply(lambda x: x[11:-9])
     ss_df['hour'] = ss_df['time'].str[:2]
@@ -49,14 +81,30 @@ def counting_by_category(df: pd.core.frame.DataFrame, categories: list[str]) -> 
     return df.groupby(categories)[categories].count()
 
 
+'''
 if __name__ == "__main__":
 
     load_dotenv()
 
-    crime_df = get_crime_data_df(ENV['MY_POSTCODE'], 2023, 1)
+    # crime_df = get_crime_data_df(ENV['MY_POSTCODE'], 2023, 1)
 
-    ss_df = get_ss_data_df(ENV['MY_POSTCODE'], 2023, 1)
+    # ss_df = get_ss_data_df(ENV['MY_POSTCODE'], 2023, 1)
 
-    print(counting_by_category(crime_df, ['street name', 'category']))
+    # print(counting_by_category(crime_df, ['street', 'category']))
 
     # print(ss_df[['time', 'hour']].head())
+
+    df = get_crime_data_df('NW51TU')
+
+    print(df.head())
+
+    print(df.shape)
+
+    ss_df = get_ss_data_df('nw5 1tu')
+
+    print(ss_df.head())
+
+    print(ss_df.shape)
+
+    print(ss_df['date'].unique())
+'''
