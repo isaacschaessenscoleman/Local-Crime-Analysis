@@ -5,7 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import use
 
-from .analyse import get_crime_data_df, get_ss_data_df, counting_by_category
+from .analyse import get_ss_data_df, counting_by_category, get_crime_data_df
 
 
 def plot_bar(df: pd.core.frame.DataFrame, file_path: str) -> None:
@@ -38,14 +38,15 @@ def plot_line(df: pd.core.frame.DataFrame, file_path: str) -> None:
     pass
 
 
-'''
 if __name__ == "__main__":
 
-    crime_df = get_crime_data_df('NW5 1TU', 2023, 1)
+    # crime_df = get_crime_data_df('NW5 1TU', 2023, 1)
 
-    crime_cat_df = counting_by_category(crime_df, ['outcome'])
+    # crime_cat_df = counting_by_category(crime_df, ['outcome'])
+
+    all_crime_df = get_all_crime_data_df('nw5 1tu')
+    all_crime_cat_df = counting_by_category(all_crime_df, ['category'])
 
     file_path = "static/png/category_chart"
 
-    plot_bar(crime_cat_df, file_path)
-'''
+    plot_bar(all_crime_cat_df, file_path)

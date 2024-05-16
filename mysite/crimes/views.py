@@ -20,9 +20,13 @@ def home(request):
 def postcode_page(request, postcode):
 
     try:
-        crime_df = get_crime_data_df(postcode, 2023, 1)
-    except:
-        return HttpResponseNotFound("404 Error: Invalid Postcode")
+        crime_df = get_crime_data_df(postcode, 2024)
+    except Exception as e:
+        # Print out the error message
+        print(f"An error occurred: {e}")
+        return HttpResponseNotFound(f"{e} Error")
+
+        # return HttpResponseNotFound("404 Error: Invalid Postcode")
 
     # Category Bar Chart
     crime_category_df = counting_by_category(crime_df, ['category'])
