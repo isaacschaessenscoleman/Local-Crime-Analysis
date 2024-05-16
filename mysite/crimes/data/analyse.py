@@ -17,9 +17,9 @@ ss_categories = ['age range', 'gender', 'legislation',
                  'object of search', 'street', 'type', 'time', 'hour']
 
 
-def get_crime_data_df(post_code: str) -> pd.core.frame.DataFrame:
-    """Given a postcode, year and month, this function returns a pandas
-    dataframe with data on instances of crimes."""
+def get_crime_data_df(post_code: str, starting_year: int) -> pd.core.frame.DataFrame:
+    """Given a postcode and a starting year, this function returns a pandas
+    dataframe with data on instances of crimes from that year."""
 
     coords = postcode_to_coords(post_code)
 
@@ -28,7 +28,7 @@ def get_crime_data_df(post_code: str) -> pd.core.frame.DataFrame:
     current_month = current_date.month
 
     dates = []
-    for year in range(2022, current_year+1):
+    for year in range(starting_year, current_year+1):
         if year == current_year:
             dates += [(coords, year, i) for i in range(1, current_month-1)]
         else:
@@ -48,7 +48,7 @@ def get_crime_data_df(post_code: str) -> pd.core.frame.DataFrame:
     return pd.DataFrame(crime_data)
 
 
-def get_ss_data_df(post_code: str) -> pd.core.frame.DataFrame:
+def get_ss_data_df(post_code: str, starting_year: int) -> pd.core.frame.DataFrame:
     """Given a postcode, year and month, this function returns a pandas
     dataframe with data on instances of stop and searches (ss)."""
 
@@ -59,7 +59,7 @@ def get_ss_data_df(post_code: str) -> pd.core.frame.DataFrame:
     current_month = current_date.month
 
     dates = []
-    for year in range(2022, current_year+1):
+    for year in range(starting_year, current_year+1):
         if year == current_year:
             dates += [(coords, year, i) for i in range(1, current_month-1)]
         else:
