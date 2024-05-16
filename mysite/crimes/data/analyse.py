@@ -12,9 +12,9 @@ import pandas as pd
 
 from .extract import postcode_to_coords, get_relevant_street_crimes_data, get_relevant_stop_and_search_data
 
-crime_categories = ['category', 'street name', 'outcome']
+crime_categories = ['category', 'street name', 'outcome', 'date']
 ss_categories = ['age range', 'gender', 'legislation',
-                 'object of search', 'street', 'type', 'time', 'hour']
+                 'object of search', 'street', 'type', 'time', 'hour', 'date']
 
 
 def get_crime_data_df(post_code: str, starting_year: int) -> pd.core.frame.DataFrame:

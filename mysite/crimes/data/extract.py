@@ -3,6 +3,7 @@ APIs.'''
 
 from os import environ as ENV
 from csv import DictWriter
+from datetime import datetime
 
 import requests
 from dotenv import load_dotenv
@@ -54,7 +55,7 @@ def get_relevant_street_crimes_data(coords: tuple[float, float], year: int, mont
 
         outcome_status = crime['outcome_status']['category'] if crime['outcome_status'] is not None else 'Unknown'
         relevant_data.append({'category': crime['category'], 'street': crime['location']
-                              ['street']['name'], 'outcome': outcome_status, 'date': f"{month}-{year}"})
+                              ['street']['name'], 'outcome': outcome_status, 'date': datetime.strptime(f"{month}-{year}", "%m-%Y")})
 
     return relevant_data
 
@@ -100,7 +101,7 @@ def get_relevant_stop_and_search_data(coords: tuple[float, float], year: int, mo
                               'involved person': event['involved_person'], 'gender': event['gender'],
                               'legislation': event['legislation'], 'time': event['datetime'],
                               'street': event['location']['street']['name'], 'type': event['type'],
-                              'object of search': event['object_of_search'], 'date': f"{month}-{year}"})
+                              'object of search': event['object_of_search'], 'date': datetime.strptime(f"{month}-{year}", "%m-%Y")})
 
     return relevant_data
 
