@@ -24,13 +24,14 @@
 
             p {
                 font-family: "Arvo", serif;
+                color: #000000;
             }
 
             .postcode-header {
                 display: inline-block;
                 font-size: 80px;
-                color: rgb(79, 79, 221);
-                background-color:rgb(6, 6, 199) ;
+                color: #222629;
+                background-color:#273744 ;
                 padding-top: 10px;
                 padding-bottom: 10px;
                 padding-right: 10px;
@@ -42,6 +43,7 @@
                 display: grid;
                 grid-template-columns: 200px 150px 150px 150px;
                 font-size: 16px;
+                margin-bottom: 10px;
             }
 
             .timeframe-label {
@@ -53,8 +55,13 @@
             label {
                 font-size: 20px;
                 font-family: "Arvo", serif;
+                color: #000000;
             }
 
+            .top-level {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
 
         </style>
     </head>
@@ -87,10 +94,19 @@
             </div>
         </div>
 
+        <div class="top-level">
+            <div>
+                <img src="{% static 'png/bar_chart.png' %}" alt="alternatetext">
+            </div>
+            <div>
+                <img style="padding-left:30px; padding-top: 0px;" src="{% static 'png/line_graph.png' %}" alt="alternatetext">
+            </div>
+        </div>
+
 
 
         <h1>My First Heading</h1>
-        <img src="{% static 'png/bar_chart.png' %}" alt="alternatetext">
+
         <p>My first paragraph.</p>
 
         <h1>Streets with the most crimes</h1>

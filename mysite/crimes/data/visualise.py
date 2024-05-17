@@ -12,11 +12,16 @@ def plot_bar(df: pd.core.frame.DataFrame, file_path: str) -> None:
     """This function produces a bar chart based on the inputted dataframe and category for
     the bars. The function saves the image to the inputted filepath."""
 
-    font_dict = {'weight': 'bold', 'size': 14}
+    font_dict = {'weight': 'bold', 'size': 12,  'color': 'black'}
 
     use('agg')
-    sns.set_theme(style='darkgrid', palette='deep', font='monospace')
-    plt.figure(facecolor='lightgray')
+    sns.set_theme(style='darkgrid', palette='deep',
+                  font='monospace')
+    fig = plt.figure(facecolor='#222629')
+    ax = fig.add_subplot()
+    ax.set_facecolor('#273744')
+    ax.tick_params(axis='x', colors='black')
+    ax.tick_params(axis='y', colors='black')
     sns.barplot(y=df.index, x=df[df.columns[0]], orient='h')
     plt.xlabel('Number of Crimes', fontdict=font_dict)
     plt.ylabel(df.columns[0].title(), fontdict=font_dict)
@@ -31,11 +36,15 @@ def plot_crimes_with_time_line_graph(df: pd.core.frame.DataFrame, file_path: str
     be filtered in some way - e.g. specific street(s) or category of crime).
     The function saves an image of the graph to the inputted filepath."""
 
-    font_dict = {'weight': 'bold', 'size': 14}
+    font_dict = {'weight': 'bold', 'size': 12,  'color': 'black'}
 
     use('agg')
-    sns.set_theme(style='darkgrid', palette='deep', font='monospace')
-    plt.figure(facecolor='lightgray')
+    sns.set_theme(palette='deep', font='monospace',)
+    fig = plt.figure(facecolor='#222629')
+    ax = fig.add_subplot()
+    ax.set_facecolor('#273744')
+    ax.tick_params(axis='x', colors='black')
+    ax.tick_params(axis='y', colors='black')
     sns.lineplot(x=df.index, y=df[df.columns[0]],
                  marker='.', markersize=10, markerfacecolor='gray')
     plt.xlabel('Date (Month-Year)', fontdict=font_dict)
