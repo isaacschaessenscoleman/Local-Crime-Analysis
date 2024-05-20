@@ -20,10 +20,7 @@ def home(request):
 
 def postcode_page(request, postcode):
 
-    print(datetime.today().strftime('%Y-%m-%d'))
-
-    if request.method == 'POST':
-        return HttpResponse('post request received - from: %s to: %s' % (request.POST.get('from-date'), request.POST.get('to-date')))
+    normal_postcode = postcode.replace(" ", "").lower()
 
     if request.method == 'GET':
 
@@ -32,8 +29,8 @@ def postcode_page(request, postcode):
         if (crime_df_dict is None):
 
             try:
-                crime_df = get_crime_data_df(postcode, 2022)
-                crime_df_dict = {postcode: crime_df}
+                crime_df = get_crime_data_df(normal_postcode, 2022)
+                crime_df_dict = {normal_postcode: crime_df}
                 cache.set('cached_crime_df_dict',
                           crime_df_dict, timeout=60 * 10)
             except Exception as e:
@@ -41,12 +38,11 @@ def postcode_page(request, postcode):
                 print(f"An error occurred: {e}")
                 return HttpResponseNotFound(f"{e} Error\n\nIf it's a 429 error just try refreshing again :)))))")
 
-        if postcode not in crime_df_dict.keys():
+        if normal_postcode not in crime_df_dict.keys():
 
             try:
-                crime_df = get_crime_data_df(postcode, 2022)
-                crime_df_dict = cache.get('cached_crime_df_dict')
-                crime_df_dict[postcode] = crime_df
+                crime_df = get_crime_data_df(normal_postcode, 2022)
+                crime_df_dict[normal_postcode] = crime_df
                 cache.set('cached_crime_df_dict',
                           crime_df_dict, timeout=60 * 10)
             except Exception as e:
@@ -54,7 +50,10 @@ def postcode_page(request, postcode):
                 print(f"An error occurred: {e}")
                 return HttpResponseNotFound(f"{e} Error\n\nIf it's a 429 error just try refreshing again :)))))")
 
-        crime_df = crime_df_dict[postcode]
+        print('GET METHOD')
+        print(f"postcode: {normal_postcode}")
+        print(crime_df_dict.keys())
+        crime_df = crime_df_dict[normal_postcode]
 
         # Line Graph
         crime_date_df = counting_by_category(crime_df, ['date'])
@@ -71,8 +70,52 @@ def postcode_page(request, postcode):
         crime_street_df['total_crimes'] = crime_df.groupby(
             'street').size().reset_index(name='total_crimes')['total_crimes']
 
-        context = {"postcode": postcode[:-3].strip().upper() + ' ' + postcode[-3:].strip().upper(),
+        context = {"postcode": normal_postcode[:-3].strip().upper() + ' ' + normal_postcode[-3:].strip().upper(),
                    "crime_street_df": crime_street_df.sort_values('total_crimes', ascending=False).head(10).iterrows(),
-                   "today": datetime.today().strftime('%Y-%m-%d')}
+                   "starting_date": "2022-01-01",
+                   "ending_date": datetime.today().strftime('%Y-%m-%d')}
+
+        return render(request, "crimes/postcode_page.html", context)
+
+    if request.method == 'POST':
+
+        from_date = datetime.strptime(
+            request.POST.get('from-date'), "%Y-%m-%d")
+        to_date = datetime.strptime(
+            request.POST.get('to-date'), "%Y-%m-%d")
+
+        crime_df_dict = cache.get('cached_crime_df_dict')
+
+        print('GET METHOD')
+        print(f"postcode: {normal_postcode}")
+        print(crime_df_dict.keys())
+
+        crime_df = crime_df_dict[normal_postcode]
+
+        print(crime_df['date'])
+        print(from_date)
+
+        crime_df = crime_df[(crime_df.date > from_date)
+                            & (crime_df.date < to_date)]
+
+        # Line Graph
+        crime_date_df = counting_by_category(crime_df, ['date'])
+        plot_crimes_with_time_line_graph(
+            crime_date_df, "crimes/static/png/line_graph")
+
+        # Category Bar Chart
+        crime_category_df = counting_by_category(crime_df, ['category'])
+        plot_bar(crime_category_df, "crimes/static/png/bar_chart")
+
+        # Streets Table
+        crime_street_df = crime_df.groupby('street')['category'].agg(
+            lambda x: x.mode().iloc[0] if not x.empty else None).reset_index()
+        crime_street_df['total_crimes'] = crime_df.groupby(
+            'street').size().reset_index(name='total_crimes')['total_crimes']
+
+        context = {"postcode": normal_postcode[:-3].strip().upper() + ' ' + normal_postcode[-3:].strip().upper(),
+                   "crime_street_df": crime_street_df.sort_values('total_crimes', ascending=False).head(10).iterrows(),
+                   "starting_date": str(from_date.date()),
+                   "ending_date": str(to_date.date())}
 
         return render(request, "crimes/postcode_page.html", context)
