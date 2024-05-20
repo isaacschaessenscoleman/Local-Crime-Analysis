@@ -41,9 +41,14 @@
 
             .timeframe-div {
                 display: grid;
-                grid-template-columns: 200px 150px 150px 150px 150px;
+                grid-template-columns: 170px 220px 220px 150px;
                 font-size: 16px;
-                margin-bottom: 10px;
+                margin-bottom: 0px;
+            }
+
+            .date-input {
+                display: grid;
+                grid-template-columns: 1fr 2fr;
             }
 
             .timeframe-label {
@@ -76,29 +81,34 @@
             Crime Data Within a 1 Mile Radius of {{postcode}}.
         </p>
 
-        <form method="post" action="{% url 'postcode_page' postcode=postcode %}">
+         <form method="post" action="{% url 'postcode_page' postcode=postcode %}">
         {% csrf_token %}
         <div class="timeframe-div">
                 <div>
                     <p class="timeframe-label">Time Frame:</p>
                 </div>
-                <div>
-                    <input type="radio" id="month" name="time-frame" value="month">
-                    <label for="month">Month</label>
+                <div class="date-input">
+                    <div>
+                        <p style="margin-top: 0px; text-align: right; margin-right: 10px;"> From</p>
+                    </div>
+                    <div>
+                        <input type="date" id="from" name="from-date" value="2022-01-01">
+                    </div>
                 </div>
-                <div>
-                    <input type="radio" id="Year" name="time-frame" value="year">
-                    <label for="year">Year</label>
+                <div class="date-input">
+                    <div>
+                        <p style="margin-top: 0px; text-align: right; margin-right: 10px;"> To </p>
+                    </div>
+                    <div>
+                        <input type="date" id="to" name="to-date" value="{{ today }}">
+                    </div>
                 </div>
-                <div>
-                    <input type="radio" id="All Time" name="time-frame" value="All Time" checked>
-                    <label for="All Time">All Time</label>
-                </div>
-                <div>
+                <div style="text-align: center;">
                     <input type="submit" value="submit">
                 </div>
         </div>
         </form>
+
 
         <div class="two-equal-columns">
             <div>

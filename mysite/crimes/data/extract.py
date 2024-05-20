@@ -21,7 +21,8 @@ def postcode_to_coords(postcode: str) -> tuple[float]:
         POSTCODE_BASE_URL+f"/postcodes/{postcode}").json()
 
     if location_data['status'] != 200:
-        raise Exception("Unsuccessful HTTP Request.")
+        raise Exception(
+            f"Unsuccessful HTTP Request. API Access Error Code: {location_data['status']}")
 
     return (location_data['result']['longitude'], location_data['result']['latitude'])
 
