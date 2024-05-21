@@ -20,11 +20,17 @@
 
             h1 {
                 font-family: "Arvo", serif;
+                text-align: center;
+                color: black;
             }
 
             p {
                 font-family: "Arvo", serif;
                 color: #000000;
+            }
+
+            input {
+                font-family: "Arvo", serif;
             }
 
             .postcode-header {
@@ -46,9 +52,31 @@
                 margin-bottom: 0px;
             }
 
-            .date-input {
+            .date-input-div {
                 display: grid;
                 grid-template-columns: 1fr 2fr;
+            }
+
+            .date-input {
+                background-color: #273744;
+                border: none;
+                border-radius: 3px;
+                cursor:pointer;
+                height: 24.5px;
+            }
+
+            .submit-button {
+                background-color: #273744;
+                color: white;
+                border: none;
+                height: 25px;
+                width: 80px;
+                border-radius: 3px;
+                cursor: pointer;
+            }
+
+            .submit-button:hover{
+                opacity: 0.7;
             }
 
             .timeframe-label {
@@ -56,6 +84,7 @@
                 margin-bottom: 0px;
                 vertical-align: top;
             }
+
 
             label {
                 font-size: 20px;
@@ -67,6 +96,20 @@
                 display: grid;
                 grid-template-columns: 1fr 1fr;
             }
+
+            .crimes-table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            
+            tr {
+                height: 35px;
+            }
+
+            tr:nth-child(even) {
+                background-color: #273744;
+            }
+
 
         </style>
     </head>
@@ -87,24 +130,24 @@
                 <div>
                     <p class="timeframe-label">Time Frame:</p>
                 </div>
-                <div class="date-input">
+                <div class="date-input-div">
                     <div>
                         <p style="margin-top: 0px; text-align: right; margin-right: 10px;"> From</p>
                     </div>
                     <div>
-                        <input type="date" id="from" name="from-date" value="{{starting_date}}">
+                        <input class="date-input" type="date" id="from" name="from-date" value="{{starting_date}}">
                     </div>
                 </div>
-                <div class="date-input">
+                <div class="date-input-div">
                     <div>
                         <p style="margin-top: 0px; text-align: right; margin-right: 10px;"> To </p>
                     </div>
                     <div>
-                        <input type="date" id="to" name="to-date" value="{{ ending_date }}">
+                        <input class="date-input" type="date" id="to" name="to-date" value="{{ ending_date }}">
                     </div>
                 </div>
                 <div style="text-align: center;">
-                    <input type="submit" value="submit">
+                    <input class="submit-button" type="submit" value="Submit">
                 </div>
         </div>
         </form>
@@ -120,9 +163,9 @@
         </div>
 
         <div class="two-equal-columns">
-            <div>
-                <h1>Streets with the most crimes</h1>
-                <table>
+            <div style="margin-left: 50px;">
+                <h1 style="text-align: center;">Areas with the most crimes</h1>
+                <table class="crimes-table">
                     <tr>
                         <th>Name</th>
                         <th>Number of Crimes</th>
@@ -139,34 +182,10 @@
                 </table>
             </div>
             <div>
-                <p> PLACEHOLDER FOR MAP</p>
+                <h1> PLACEHOLDER FOR MAP</h1>
             </div>
         </div>
 
-
-
-        <h1>My First Heading</h1>
-
-        <p>My first paragraph.</p>
-
-        <h1>Streets with the most crimes</h1>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>Number of Crimes</th>
-                <th>Most Common Category</th>
-            </tr>
-            {% for index, row in crime_street_df %}
-            <tr>
-                <td>{{ row.street }}</td>
-                <td>{{ row.total_crimes }}</td>
-                <td>{{ row.category }}</td>
-
-            </tr>
-            {% endfor %}
-        </table>
-
-    </div>
 </body>
 </html>
 

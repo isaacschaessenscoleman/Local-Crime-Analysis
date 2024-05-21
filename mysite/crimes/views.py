@@ -25,6 +25,7 @@ def postcode_page(request, postcode):
     if request.method == 'GET':
 
         crime_df_dict = cache.get('cached_crime_df_dict')
+        print(f"Crime Dict Data: {crime_df_dict}")
 
         if (crime_df_dict is None):
 
@@ -38,7 +39,7 @@ def postcode_page(request, postcode):
                 print(f"An error occurred: {e}")
                 return HttpResponseNotFound(f"{e} Error\n\nIf it's a 429 error just try refreshing again :)))))")
 
-        if normal_postcode not in crime_df_dict.keys():
+        elif normal_postcode not in crime_df_dict.keys():
 
             try:
                 crime_df = get_crime_data_df(normal_postcode, 2022)
@@ -53,6 +54,7 @@ def postcode_page(request, postcode):
         print('GET METHOD')
         print(f"postcode: {normal_postcode}")
         print(crime_df_dict.keys())
+        print([type(value) for value in crime_df_dict.values()])
         crime_df = crime_df_dict[normal_postcode]
 
         # Line Graph
@@ -95,8 +97,8 @@ def postcode_page(request, postcode):
         print(crime_df['date'])
         print(from_date)
 
-        crime_df = crime_df[(crime_df.date > from_date)
-                            & (crime_df.date < to_date)]
+        crime_df = crime_df[(crime_df.date >= from_date)
+                            & (crime_df.date <= to_date)]
 
         # Line Graph
         crime_date_df = counting_by_category(crime_df, ['date'])
