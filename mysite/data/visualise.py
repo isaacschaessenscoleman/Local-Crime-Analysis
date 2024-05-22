@@ -4,6 +4,7 @@ import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import use
+from matplotlib.colors import ListedColormap
 
 from .analyse import get_ss_data_df, counting_by_category, get_crime_data_df
 
@@ -56,17 +57,123 @@ def plot_crimes_with_time_line_graph(df: pd.core.frame.DataFrame, file_path: str
     plt.savefig(file_path, bbox_inches='tight')
 
 
-'''
+def object_of_search_bar_chart(df: pd.core.frame.DataFrame, third_var=None):
+    """This function produces a horizontal bar chart of the number of stop and
+        searches with respect to the object of search. There is also an optional
+        argument to add a third variable (age, gender or outcome), creating a
+        stacked bar chart."""
+
+    if third_var is None:
+
+        grouped_df = df.groupby(
+            ['object of search']).size()
+
+        font_dict = {'weight': 'bold', 'size': 12,  'color': 'black'}
+        sns.set_theme(palette='deep', font='monospace')
+        fig, ax = plt.subplots(figsize=(10, 6))
+        fig.patch.set_facecolor('#222629')
+        grouped_df.plot(kind='barh', ax=ax,
+                        figsize=(10, 6))
+        plt.ylabel('Object of Search', fontdict=font_dict)
+        plt.xlabel('Number of Searches', fontdict=font_dict)
+        ax.tick_params(axis='x', colors='black')
+        ax.tick_params(axis='y', colors='black')
+        plt.title(f'Number of Stop and Searches by Object of Search',
+                  fontdict=font_dict)
+        plt.tight_layout()
+        plt.show()
+
+    elif third_var in ["age range", "gender", "outcome"]:
+
+        df = all_ss_df.groupby(
+            ['object of search', third_var]).size().unstack(fill_value=0)
+
+        font_dict = {'weight': 'bold', 'size': 12,  'color': 'black'}
+        sns.set_theme(palette='deep', font='monospace')
+        fig, ax = plt.subplots(figsize=(10, 6))
+        fig.patch.set_facecolor('#222629')
+        df.plot(kind='barh', stacked=True, ax=ax,
+                figsize=(10, 6), colormap='Blues')
+        plt.ylabel('Object of Search', fontdict=font_dict)
+        plt.xlabel('Number of Searches', fontdict=font_dict)
+        ax.tick_params(axis='x', colors='black')
+        ax.tick_params(axis='y', colors='black')
+        plt.title(f'Number of Stop and Searches by Object of Search and {third_var.title()}',
+                  fontdict=font_dict)
+        plt.legend(title=third_var.title())
+        plt.tight_layout()
+        plt.show()
+
+    else:
+        raise ValueError(
+            "The only valid third variables are 'age range', 'gender' or 'outcome'.")
+
+
+def stop_and_search_pie_chart(df: pd.core.frame.DataFrame, category: str, loc: str):
+    """This function produces a pie chart with the number of stop and searches
+    based on a particular category (e.g. 'age range', 'legislation', etc)."""
+
+    grouped_df = counting_by_category(all_ss_df, [category])
+    print(1)
+
+    font_dict = {'weight': 'bold', 'size': 12,  'color': 'black'}
+    print(2)
+    fig = plt.figure(facecolor='#222629')
+    colour_palette = sns.color_palette("ch:s=.25,rot=-.25")
+    plt.pie(grouped_df[category],
+            colors=colour_palette, autopct='%.0f%%')  # Create pie chart
+    print(3)
+    fig.legend(grouped_df.index, loc=loc)
+    plt.title(
+        f'Stop and Searches by {category.title()}', fontdict=font_dict)
+    print(4)
+    plt.show()
+
+
 if __name__ == "__main__":
 
     # crime_df = get_crime_data_df('NW5 1TU', 2023, 1)
 
     # crime_cat_df = counting_by_category(crime_df, ['outcome'])
 
-    all_crime_df = get_crime_data_df('nw5 1tu', 2023)
-    all_crime_date_df = counting_by_category(all_crime_df, ['date'])
+    all_ss_df = get_ss_data_df('nw5 1tu', 2023)
 
-    print(all_crime_date_df)
+    '''
+    # STOP AND SEARCH BAR CHART BY HOUR IN THE DAY
 
-    plot_crimes_with_time_line_graph(all_crime_date_df, 'yo')
-'''
+    df = counting_by_category(all_ss_df, ['hour'])
+
+    font_dict = {'weight': 'bold', 'size': 12,  'color': 'black'}
+    sns.set_theme(palette='deep', font='monospace')
+    fig = plt.figure(facecolor='#222629')
+    ax = fig.add_subplot()
+    ax.set_facecolor('#273744')
+    ax.tick_params(axis='x', colors='black')
+    ax.tick_params(axis='y', colors='black')
+    sns.barplot(x=df.index, y=df[df.columns[0]])
+    plt.ylabel('Number of Stop and Searches', fontdict=font_dict)
+    plt.xlabel(df.columns[0].title(), fontdict=font_dict)
+    plt.title("Stop and Searches by Hour", fontdict=font_dict)
+
+    plt.show()
+    
+
+    
+    # object of search bar chart
+    object_of_search_bar_chart(all_ss_df)
+
+    # object of search bar chart by age range
+    object_of_search_bar_chart(all_ss_df, 'age range')
+
+    # object of search bar chart by gender
+    object_of_search_bar_chart(all_ss_df, 'gender')
+
+    # object of search bar chart by outcome
+    object_of_search_bar_chart(all_ss_df, 'outcome')
+
+    # stop and search pie chart by age
+    stop_and_search_pie_chart(all_ss_df, 'age range', 'center right')
+
+    # stop and search pie chart by legislation
+    stop_and_search_pie_chart(all_ss_df, 'legislation', 'lower center')
+    '''

@@ -6,8 +6,9 @@ from django.http import HttpResponseNotFound
 from django.core.cache import cache
 from django.shortcuts import render
 
-from .data.analyse import get_crime_data_df, counting_by_category
-from .data.visualise import plot_bar, plot_crimes_with_time_line_graph
+
+from data.analyse import get_crime_data_df, counting_by_category
+from data.visualise import plot_bar, plot_crimes_with_time_line_graph
 
 from datetime import datetime
 
