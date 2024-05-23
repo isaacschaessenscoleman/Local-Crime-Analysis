@@ -96,16 +96,14 @@ def counting_by_category(df: pd.core.frame.DataFrame, categories: list[str]) -> 
     return df.groupby(categories)[categories].count()
 
 
-'''
 if __name__ == "__main__":
 
     load_dotenv()
 
-    ss_df = get_ss_data_df('nw5 1tu')
+    ss_df = get_ss_data_df('nw5 1tu', 2022)
 
     print(ss_df.head())
 
     print(ss_df.shape)
 
     # print(ss_df['date'].unique())
-'''

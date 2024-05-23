@@ -78,7 +78,7 @@ def postcode_page(request, postcode):
                    "starting_date": "2022-01-01",
                    "ending_date": datetime.today().strftime('%Y-%m-%d')}
 
-        return render(request, "crimes/postcode_page.html", context)
+        return render(request, "crimes/crime_postcode_page.html", context)
 
     if request.method == 'POST':
 
@@ -121,4 +121,4 @@ def postcode_page(request, postcode):
                    "starting_date": str(from_date.date()),
                    "ending_date": str(to_date.date())}
 
-        return render(request, "crimes/postcode_page.html", context)
+        return render(request, "crimes/crime_postcode_page.html", context)

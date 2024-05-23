@@ -56,7 +56,8 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'crimes/templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'crimes/templates'),
+                 os.path.join(BASE_DIR, 'stop_and_searches/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,7 +119,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "Static/"
-STATICFILES_DIRS = [BASE_DIR / "crimes/static"]
+STATICFILES_DIRS = [BASE_DIR / "crimes/static",
+                    BASE_DIR / "stop_and_searches/static"]
 print()
 
 
