@@ -57,11 +57,13 @@ def plot_crimes_with_time_line_graph(df: pd.core.frame.DataFrame, file_path: str
     plt.savefig(file_path, bbox_inches='tight')
 
 
-def object_of_search_bar_chart(df: pd.core.frame.DataFrame, third_var=None):
+def object_of_search_bar_chart(df: pd.core.frame.DataFrame, file_path: str, third_var=None):
     """This function produces a horizontal bar chart of the number of stop and
         searches with respect to the object of search. There is also an optional
         argument to add a third variable (age, gender or outcome), creating a
         stacked bar chart."""
+
+    use('agg')
 
     if third_var is None:
 
@@ -81,7 +83,7 @@ def object_of_search_bar_chart(df: pd.core.frame.DataFrame, third_var=None):
         plt.title(f'Number of Stop and Searches by Object of Search',
                   fontdict=font_dict)
         plt.tight_layout()
-        plt.show()
+        plt.savefig(file_path, bbox_inches='tight')
 
     elif third_var in ["age range", "gender", "outcome"]:
 
@@ -102,34 +104,32 @@ def object_of_search_bar_chart(df: pd.core.frame.DataFrame, third_var=None):
                   fontdict=font_dict)
         plt.legend(title=third_var.title())
         plt.tight_layout()
-        plt.show()
+        plt.savefig(file_path, bbox_inches='tight')
 
     else:
         raise ValueError(
             "The only valid third variables are 'age range', 'gender' or 'outcome'.")
 
 
-def stop_and_search_pie_chart(df: pd.core.frame.DataFrame, category: str, loc: str):
+def stop_and_search_pie_chart(df: pd.core.frame.DataFrame, category: str, loc: str, file_path: str):
     """This function produces a pie chart with the number of stop and searches
     based on a particular category (e.g. 'age range', 'legislation', etc)."""
 
-    grouped_df = counting_by_category(all_ss_df, [category])
-    print(1)
+    use('agg')
+    grouped_df = counting_by_category(df, [category])
 
     font_dict = {'weight': 'bold', 'size': 12,  'color': 'black'}
-    print(2)
     fig = plt.figure(facecolor='#222629')
     colour_palette = sns.color_palette("ch:s=.25,rot=-.25")
     plt.pie(grouped_df[category],
             colors=colour_palette, autopct='%.0f%%')  # Create pie chart
-    print(3)
     fig.legend(grouped_df.index, loc=loc)
     plt.title(
         f'Stop and Searches by {category.title()}', fontdict=font_dict)
-    print(4)
-    plt.show()
+    plt.savefig(file_path, bbox_inches='tight')
 
 
+'''
 if __name__ == "__main__":
 
     # crime_df = get_crime_data_df('NW5 1TU', 2023, 1)
@@ -138,7 +138,6 @@ if __name__ == "__main__":
 
     all_ss_df = get_ss_data_df('nw5 1tu', 2023)
 
-    '''
     # STOP AND SEARCH BAR CHART BY HOUR IN THE DAY
 
     df = counting_by_category(all_ss_df, ['hour'])
@@ -176,4 +175,4 @@ if __name__ == "__main__":
 
     # stop and search pie chart by legislation
     stop_and_search_pie_chart(all_ss_df, 'legislation', 'lower center')
-    '''
+'''

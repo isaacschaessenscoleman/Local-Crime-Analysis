@@ -109,6 +109,21 @@
             tr:nth-child(even) {
                 background-color: #273744;
             }
+
+            .who-div {
+                display: grid;
+                grid-template-columns: 280px 1fr 1fr;
+                height: 411px;
+                margin-top: 20px;
+
+            }
+
+            .gender-heading {
+                margin-top: 4px;
+                font-size: 20px;
+                font-weight: 550;
+            }
+
         </style>
     </head>
     <body>
@@ -117,7 +132,7 @@
         </h1>   
         <div class="rest-of-page">     
             <p>
-                Crime Data Within a 1 Mile Radius of {{postcode}}.
+                Stop and Search Data Within a 1 Mile Radius of {{postcode}}.
             </p>
 
             <form method="post" action="{% url 'postcode_page' postcode=postcode %}">
@@ -147,5 +162,35 @@
                     </div>
             </div>
             </form>
+        </div>
+
+            <img src="{% static 'png/bar-chart-by-hour.png' %}">
+            <div class="who-div">
+                <div>
+                    <h1 class="postcode-header" style="margin-top: 20px;" ;">Who?</h1>
+                </div>
+                <div>
+                    <img src="{% static 'png/age-pie-chart.png' %}">
+                </div>
+                <div>
+                    <h1 class="gender-heading">Stop and Searches by Gender</h1>
+                    <table class="crimes-table">
+                        <tr>
+                            <th>Gender</th>
+                            <th>Number of Stop and Searches</th>
+                        </tr>
+                        {% for index, row in ss_gender_df %}
+                        <tr>
+                            <td>{{ index }}</td>
+                            <td>{{ row.count }}</td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+
+
     </body>
+
+
 </html>

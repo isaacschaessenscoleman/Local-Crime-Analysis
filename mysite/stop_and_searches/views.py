@@ -3,6 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 
 import matplotlib.pyplot as plt
+from matplotlib import use
 
 from django.http import HttpResponse
 from django.http import HttpResponseNotFound
@@ -16,6 +17,7 @@ from data.visualise import plot_bar, plot_crimes_with_time_line_graph, object_of
 
 
 from datetime import datetime
+import seaborn as sns
 
 # Create your views here.
 
@@ -71,25 +73,46 @@ def postcode_page(request, postcode):
         ss_df = ss_df_dict[normal_postcode]
 
         # CREATING GRAPHS, TO SAVE AND THEN IMPLEMENT INTO HTML PAGE
-        '''
-        # Line Graph
-        crime_date_df = counting_by_category(crime_df, ['date'])
-        plot_crimes_with_time_line_graph(
-            crime_date_df, "crimes/static/png/line_graph")
 
-        # Category Bar Chart
-        crime_category_df = counting_by_category(crime_df, ['category'])
-        plot_bar(crime_category_df, "crimes/static/png/bar_chart")
-        
+        # BAR CHART BY HOUR
+        use('agg')
+        ss_hour_df = counting_by_category(ss_df, ['hour'])
+        font_dict = {'weight': 'bold', 'size': 12,  'color': 'black'}
+        sns.set_theme(palette='deep', font='monospace')
+        fig = plt.figure(facecolor='#222629', figsize=(14, 6))
+        ax = fig.add_subplot()
+        ax.set_facecolor('#273744')
+        ax.tick_params(axis='x', colors='black')
+        ax.tick_params(axis='y', colors='black')
+        sns.barplot(x=ss_hour_df.index,
+                    y=ss_hour_df[ss_hour_df.columns[0]], width=0.5)
+        plt.ylabel('Number of Stop and Searches', fontdict=font_dict)
+        plt.xlabel(ss_hour_df.columns[0].title(), fontdict=font_dict)
+        plt.title("Stop and Searches by Hour", fontdict=font_dict)
+        plt.savefig('stop_and_searches/static/png/bar-chart-by-hour',
+                    bbox_inches='tight')
 
-        # Streets Table
-        ss_street_df = ss_df.groupby('street')['category'].agg(
-            lambda x: x.mode().iloc[0] if not x.empty else None).reset_index()
-        ss_street_df['total_ss'] = ss_df.groupby(
-            'street').size().reset_index(name='total_ss')['total_ss']
-            '''
+        # BAR CHART BY OBJECT OF SEARCH
+        object_of_search_bar_chart(
+            ss_df, 'stop_and_searches/static/png/object-of-search-bar')
+
+        # PIE CHART BY AGE
+        stop_and_search_pie_chart(ss_df, 'age range', 'center right',
+                                  'stop_and_searches/static/png/age-pie-chart')
+
+        # PIE CHART BY LEGISLATION
+        stop_and_search_pie_chart(
+            ss_df, 'legislation', 'lower center', 'stop_and_searches/static/png/legislation-pie-chart')
+
+        # Gender Table
+        ss_gender_df = counting_by_category(ss_df, ['gender'])
+        print(ss_gender_df.columns)
+        ss_gender_df = ss_gender_df.rename(columns={"gender": "count"})
+        print(ss_gender_df.columns)
+        print('-------------------------------')
 
         context = {"postcode": normal_postcode[:-3].strip().upper() + ' ' + normal_postcode[-3:].strip().upper(),
+                   "ss_gender_df": ss_gender_df.sort_values('count', ascending=False).iterrows(),
                    "starting_date": "2022-01-01",
                    "ending_date": datetime.today().strftime('%Y-%m-%d')}
 
