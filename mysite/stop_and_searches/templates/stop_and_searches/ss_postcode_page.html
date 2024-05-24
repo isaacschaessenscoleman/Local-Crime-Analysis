@@ -124,6 +124,11 @@
                 font-weight: 550;
             }
 
+            .legislation-div {
+                display: grid;
+                grid-template-columns: 1fr 3fr;
+            }
+
         </style>
     </head>
     <body>
@@ -164,31 +169,46 @@
             </form>
         </div>
 
-            <img src="{% static 'png/bar-chart-by-hour.png' %}">
-            <div class="who-div">
-                <div>
-                    <h1 class="postcode-header" style="margin-top: 20px;" ;">Who?</h1>
-                </div>
-                <div>
-                    <img src="{% static 'png/age-pie-chart.png' %}">
-                </div>
-                <div>
-                    <h1 class="gender-heading">Stop and Searches by Gender</h1>
-                    <table class="crimes-table">
-                        <tr>
-                            <th>Gender</th>
-                            <th>Number of Stop and Searches</th>
-                        </tr>
-                        {% for index, row in ss_gender_df %}
-                        <tr>
-                            <td>{{ index }}</td>
-                            <td>{{ row.count }}</td>
-                        </tr>
-                    {% endfor %}
-                    </table>
-                </div>
+        <img src="{% static 'png/bar-chart-by-hour.png' %}">
+        <div class="who-div">
+            <div>
+                <h1 class="postcode-header" style="margin-top: 20px;" ;">Who?</h1>
+            </div>
+            <div>
+                <img src="{% static 'png/age-pie-chart.png' %}">
+            </div>
+            <div>
+                <h1 class="gender-heading">Stop and Searches by Gender</h1>
+                <table class="crimes-table">
+                    <tr>
+                        <th>Gender</th>
+                        <th>Number of Stop and Searches</th>
+                    </tr>
+                    {% for index, row in ss_gender_df %}
+                    <tr>
+                        <td>{{ index }}</td>
+                        <td>{{ row.count }}</td>
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+        </div>
+        <h1 style="text-align: left;">Object of Search</h1>
+        <div class="legislation-div">
+            <div>
+                <img src="{% static 'png/object-of-search-bar.png' %}">
+            </div>
+            <div>
+                <p>Third Variable:</p>
+                <label for="age">Age</label>
+                <input type="radio" id="age" name="third-var" value="age">
+                <label for="gender">Gender</label>
+                <input type="radio" id="gender" name="third-var" value="gender">
+                <label for="outcome">Outcome</label>
+                <input type="radio" id="outcome" name="third-var" value="outcome">
             </div>
 
+        </div>
 
     </body>
 
