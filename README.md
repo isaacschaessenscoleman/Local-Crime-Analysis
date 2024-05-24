@@ -24,3 +24,4 @@
 | Endpoint              | Request | Description | Example |
 | :---------------- | :------: | ----: | ----: |
 | /crimes/`<postcode>`  |   GET   | A page with stats/visualisations about<br>crimes around the given postcode | http://127.0.0.1:8000/crimes/N1C4AX/ |
+| /stop_and_searches/`<postcode>`  |   GET   | A page with stats/visualisations about<br>stop and search instances around the given postcode | http://127.0.0.1:8000/stop_and_searches/EC2M4TR/ |
