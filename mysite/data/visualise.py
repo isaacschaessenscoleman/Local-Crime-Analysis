@@ -73,6 +73,7 @@ def object_of_search_bar_chart(df: pd.core.frame.DataFrame, file_path: str, thir
         font_dict = {'weight': 'bold', 'size': 12,  'color': 'black'}
         sns.set_theme(palette='deep', font='monospace')
         fig, ax = plt.subplots(figsize=(10, 6))
+        ax.set_facecolor('#273744')
         fig.patch.set_facecolor('#222629')
         grouped_df.plot(kind='barh', ax=ax,
                         figsize=(10, 6))
@@ -87,12 +88,13 @@ def object_of_search_bar_chart(df: pd.core.frame.DataFrame, file_path: str, thir
 
     elif third_var in ["age range", "gender", "outcome"]:
 
-        df = all_ss_df.groupby(
+        df = df.groupby(
             ['object of search', third_var]).size().unstack(fill_value=0)
 
         font_dict = {'weight': 'bold', 'size': 12,  'color': 'black'}
         sns.set_theme(palette='deep', font='monospace')
         fig, ax = plt.subplots(figsize=(10, 6))
+        ax.set_facecolor('#273744')
         fig.patch.set_facecolor('#222629')
         df.plot(kind='barh', stacked=True, ax=ax,
                 figsize=(10, 6), colormap='Blues')

@@ -129,6 +129,22 @@
                 grid-template-columns: 1fr 3fr;
             }
 
+            .third-var-div {
+                display: grid;
+                grid-template-rows: 50px 50px 50px 50px 50px 50px;
+                margin-left: 12px;
+                margin-top: 10px;
+            }
+
+            .third-var-options-div {
+                margin-left: 40px;
+            }
+
+            .third-var-labels:hover {
+                background-color: #273744;
+                opacity: 0.5;
+            }
+
         </style>
     </head>
     <body>
@@ -140,7 +156,7 @@
                 Stop and Search Data Within a 1 Mile Radius of {{postcode}}.
             </p>
 
-            <form method="post" action="{% url 'postcode_page' postcode=postcode %}">
+            <form method="post" action="{% url 'postcode__page' postcode=postcode %}">
             {% csrf_token %}
             <div class="timeframe-div">
                     <div>
@@ -169,6 +185,7 @@
             </form>
         </div>
 
+
         <img src="{% static 'png/bar-chart-by-hour.png' %}">
         <div class="who-div">
             <div>
@@ -194,21 +211,40 @@
             </div>
         </div>
         <h1 style="text-align: left;">Object of Search</h1>
-        <div class="legislation-div">
-            <div>
-                <img src="{% static 'png/object-of-search-bar.png' %}">
+        <form method="post" action="{% url 'postcode__page' postcode=postcode %}">
+            {% csrf_token %}
+            <div class="legislation-div">
+                <div>
+                    <img src="{% static 'png/object-of-search-bar.png' %}">
+                </div>
+                <div class="third-var-div">
+                    <div>
+                        <p><b>Third Variable:</b></p>
+                    </div>
+                    <div class="third-var-options-div">
+                        <label class="third-var-labels" for="age">Age</label>
+                        <input type="radio" id="age" name="third-var" value="age range">
+                    </div>
+                    <div class="third-var-options-div">
+                        <label class="third-var-labels for="gender">Gender</label>
+                        <input type="radio" id="gender" name="third-var" value="gender">                  
+                    </div>
+                    <div class="third-var-options-div">
+                        <label class="third-var-labels for="outcome">Outcome</label>
+                        <input type="radio" id="outcome" name="third-var" value="outcome">
+                    </div>
+                    <div class="third-var-options-div">
+                        <label class="third-var-labels" for="none">None</label>
+                        <input type="radio" id="none" name="third-var" value="none" checked>
+                    </div>
+                    <input type="hidden" name="starting_date" value="{{ starting_date }}">
+                    <input type="hidden" name="ending_date" value="{{ ending_date }}">
+                    <div style="text-align: center;">
+                        <input class="submit-button" type="submit" value="Submit">
+                    </div>
+                </div>
             </div>
-            <div>
-                <p>Third Variable:</p>
-                <label for="age">Age</label>
-                <input type="radio" id="age" name="third-var" value="age">
-                <label for="gender">Gender</label>
-                <input type="radio" id="gender" name="third-var" value="gender">
-                <label for="outcome">Outcome</label>
-                <input type="radio" id="outcome" name="third-var" value="outcome">
-            </div>
-
-        </div>
+        </form>
 
     </body>
 
