@@ -120,7 +120,8 @@ USE_TZ = True
 
 STATIC_URL = "Static/"
 STATICFILES_DIRS = [BASE_DIR / "crimes/static",
-                    BASE_DIR / "stop_and_searches/static"]
+                    BASE_DIR / "stop_and_searches/static",
+                    BASE_DIR / "mysite/static"]
 print()
 
 

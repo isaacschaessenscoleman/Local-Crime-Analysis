@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{% static 'css/crime_postcode_page.css' %}">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400;1,700&family=DM+Serif+Display&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    
+        <style>
+
+            body {
+                margin: 0px;
+            }
+
+            .rest-of-page {
+                margin: 10px
+            }
+
+            h1 {
+                font-family: "Arvo", serif;
+                text-align: center;
+                color: black;
+            }
+
+            p {
+                font-family: "Arvo", serif;
+                color: #000000;
+            }
+
+            input {
+                font-family: "Arvo", serif;
+            }
+
+            .postcode-header {
+                display: inline-block;
+                font-size: 80px;
+                color: #222629;
+                background-color:#273744 ;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-right: 10px;
+                margin-top: 20px;
+                margin-bottom: 0px;
+            }
+
+            .timeframe-div {
+                display: grid;
+                grid-template-columns: 170px 220px 220px 150px;
+                font-size: 16px;
+                margin-bottom: 0px;
+            }
+
+            .date-input-div {
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+            }
+
+            .date-input {
+                background-color: #273744;
+                border: none;
+                border-radius: 3px;
+                cursor:pointer;
+                height: 24.5px;
+            }
+
+            .submit-button {
+                background-color: #273744;
+                color: white;
+                border: none;
+                height: 25px;
+                width: 80px;
+                border-radius: 3px;
+                cursor: pointer;
+            }
+
+            .submit-button:hover{
+                opacity: 0.7;
+            }
+
+            .timeframe-label {
+                margin-top: 0px;
+                margin-bottom: 0px;
+                vertical-align: top;
+            }
+
+
+            label {
+                font-size: 20px;
+                font-family: "Arvo", serif;
+                color: #000000;
+            }
+
+            .two-equal-columns {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .crimes-table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            
+            tr {
+                height: 35px;
+            }
+
+            tr:nth-child(even) {
+                background-color: #273744;
+            }
+
+
+        </style>
+    </head>
+
+
+<body>
+    <h1 class="postcode-header">
+        {{postcode}}
+    </h1>   
+    <div class="rest-of-page">     
+        <p>
+            Crime Data Within a 1 Mile Radius of {{postcode}}.
+        </p>
+
+       
+
+
+
+       
+</body>
+</html>
+

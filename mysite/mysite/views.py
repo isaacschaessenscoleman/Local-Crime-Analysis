@@ -12,4 +12,6 @@ from datetime import datetime
 
 
 def home(request):
-    return HttpResponse(f"THIS IS THE HOME PAGE\n {request.body}\n{request.path}")
+    context = {}
+
+    return render(request, "mysite/home_page.html", context)
