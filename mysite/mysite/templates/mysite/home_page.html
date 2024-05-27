@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="{% static 'css/crime_postcode_page.css' %}">
+        <link rel="stylesheet" href="{% static 'css/home_page.css' %}">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -110,6 +110,12 @@
                 background-color: #273744;
             }
 
+            .redirect-div {
+                display: grid;
+                grid-template-columns: 200px 150px 150px 150px;
+
+            }
+
 
         </style>
     </head>
@@ -117,12 +123,43 @@
 
 <body>
     <h1 class="postcode-header">
-        {{postcode}}
+        Home
     </h1>   
     <div class="rest-of-page">     
         <p>
-            Crime Data Within a 1 Mile Radius of {{postcode}}.
+            Welcome!
         </p>
+        <p>
+            This site allows you to take advantage of the publicly available data that the UK police provide about your local area.
+        </p>
+        <p>
+            By simply entering a postcode, we offer summary statistics and visualisations to give users a more informed view and better understanding of local crime.
+        </p>
+
+        <form method="post" action="{% url 'search_queries' %}">
+        {% csrf_token %}
+            <div class="redirect-div">
+                <div>
+                    <input class="search-bar" type="search" name="postcode" id="postcode" placeholder="Search" required>
+                </div>
+                <div>
+                    <input type="radio" id="crimes" name="webpage" value="Crimes">
+                    <label for="crimes">Crimes</label>
+                </div>
+                <div>
+                    <input type="radio" id="stop-and-search" name="webpage" value="Stop and Searches">
+                    <label for="stop-and-search">Stop and Searches</label>
+                </div>
+                <div>
+                    <input type="submit" value="Submit">
+            </div>
+        </form>
+
+
+
+        </div>
+
+
 
        
 

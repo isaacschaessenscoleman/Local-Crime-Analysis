@@ -15,3 +15,14 @@ def home(request):
     context = {}
 
     return render(request, "mysite/home_page.html", context)
+
+
+def search_queries(request):
+    context = {}
+
+    if request.method == 'POST':
+
+        postcode = request.POST.get('postcode')
+        print(postcode)
+
+        return HttpResponse(request)
