@@ -7,6 +7,8 @@ from matplotlib import use
 
 from django.http import HttpResponse
 from django.http import HttpResponseNotFound
+from django.views.decorators.csrf import csrf_protect
+from django.middleware.csrf import get_token
 
 from django.core.cache import cache
 from django.shortcuts import render
@@ -26,6 +28,7 @@ def home(request):
     return HttpResponse(f"Hello, world. You're at the stop and search home page.\n {request.body}\n{request.path}")
 
 
+@csrf_protect
 def postcode_page(request, postcode):
 
     normal_postcode = postcode.replace(" ", "").lower()
@@ -111,10 +114,13 @@ def postcode_page(request, postcode):
         print(ss_gender_df.columns)
         print('-------------------------------')
 
+        csrf_token = get_token(request)
+
         context = {"postcode": normal_postcode[:-3].strip().upper() + ' ' + normal_postcode[-3:].strip().upper(),
                    "ss_gender_df": ss_gender_df.sort_values('count', ascending=False).iterrows(),
                    "starting_date": "2022-01-01",
-                   "ending_date": datetime.today().strftime('%Y-%m-%d')}
+                   "ending_date": datetime.today().strftime('%Y-%m-%d'),
+                   'csrf_token': csrf_token}
 
         return render(request, "stop_and_searches/ss_postcode_page.html", context)
 

@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 
 from django.http import HttpResponse
 from django.http import HttpResponseNotFound
+from django.views.decorators.csrf import csrf_protect
+from django.middleware.csrf import get_token
 
 from django.core.cache import cache
 from django.shortcuts import render
@@ -19,6 +21,7 @@ def home(request):
     return HttpResponse(f"Hello, world. You're at the crime home page.\n {request.body}\n{request.path}")
 
 
+@csrf_protect
 def postcode_page(request, postcode):
 
     normal_postcode = postcode.replace(" ", "").lower()
@@ -73,10 +76,13 @@ def postcode_page(request, postcode):
         crime_street_df['total_crimes'] = crime_df.groupby(
             'street').size().reset_index(name='total_crimes')['total_crimes']
 
+        csrf_token = get_token(request)
+
         context = {"postcode": normal_postcode[:-3].strip().upper() + ' ' + normal_postcode[-3:].strip().upper(),
                    "crime_street_df": crime_street_df.sort_values('total_crimes', ascending=False).head(10).iterrows(),
                    "starting_date": "2022-01-01",
-                   "ending_date": datetime.today().strftime('%Y-%m-%d')}
+                   "ending_date": datetime.today().strftime('%Y-%m-%d'),
+                   'csrf_token': csrf_token}
 
         return render(request, "crimes/crime_postcode_page.html", context)
 
